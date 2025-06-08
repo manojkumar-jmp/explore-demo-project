@@ -2,7 +2,7 @@
 
 | Step |Project               | Key Actions                                                      |
 |------|----------------------|------------------------------------------------------------------|
-|1     |[Solution & Projects](#docs/1-SolutionAndProjectSetup.md)   |Create all projects, reference appropriately                      |
+|1     |[Solution & Projects](docs/1-SolutionAndProjectSetup.md)   |Create all projects, reference appropriately                      |
 |2     |BookLibrary.Data      | Entities, DbContext, repositories, EF setup                      |
 |3     |BookLibrary.Business  | Service interfaces, business logic, rules                        |
 |4     | BookLibrary.Web      | Controllers, views, DI, error handling                           |
