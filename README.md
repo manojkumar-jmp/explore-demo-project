@@ -69,6 +69,26 @@ BookLibrary/
 4. **BookRepository** persists the book using `LibraryContext`.
 5. **If error**, message is displayed in UI; **if success**, user is redirected to book list.
 
+```mermaid
+sequenceDiagram
+    participant U as User (UI)
+    participant C as BooksController
+    participant S as BookService
+    participant R as BookRepository
+    participant D as LibraryContext (DB)
+
+    U->>C: Submit Add Book form
+    C->>S: AddBook(book)
+    S->>S: Validate business rule (title cannot contain "Test")
+    alt Valid
+        S->>R: Add(book)
+        R->>D: SaveChanges()
+        C->>U: Redirect to Book List
+    else Invalid
+        S->>C: throw InvalidOperationException
+        C->>U: Display error message
+    end
+```
 ---
 
 ## 2. Scope for Unit Test (xUnit), SpecFlow (BDD), and UI Testing
