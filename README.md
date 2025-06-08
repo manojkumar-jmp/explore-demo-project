@@ -1,6 +1,9 @@
 # BookLibrary Demo Project: Architecture Overview & Testing Scope
 
 > This demo project will use in upcomming tutorial series for Unit Testing, TDT and UI testing. 
+
+---
+> [Solution in Detail](docs/0-Overview.md)
 ---
 
 ## 1. Architecture Overview
