@@ -11,11 +11,6 @@
  - Add a new book
  - Edit or delete a book
 
-### Tech Stack:
- - Backend: ASP.NET Core (Web API)
- - Frontend/UI: ASP.NET Core MVC or Razor Pages (or, optionally, Blazor or Angular/React if you prefer)
- - Testing: SpecFlow for BDD, xUnit for test execution, Selenium WebDriver for UI automation
-
 ## 1. Architecture Overview
 
 A simple ASP.NET MVC (.NET Framework 4.8) application for managing a library of books. This project demonstrates clean layered architecture, separation of concerns, dependency injection, and testability, suitable for BDD (SpecFlow), UI automation (Selenium), xUnit-based unit testing, and database unit testing with tSQLt.
