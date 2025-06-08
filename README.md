@@ -86,6 +86,7 @@ sequenceDiagram
     participant S as BookService
     participant R as BookRepository
     participant D as LibraryContext (DB)
+    participant SQL as BookLibrary.Database (SQL Scripts)
 
     U->>C: Submit Add Book form
     C->>S: AddBook(book)
@@ -93,12 +94,14 @@ sequenceDiagram
     alt Valid
         S->>R: Add(book)
         R->>D: SaveChanges()
+        D->>SQL: Underlying SQL scripts maintained in BookLibrary.Database
         C->>U: Redirect to Book List
     else Invalid
         S->>C: throw InvalidOperationException
         C->>U: Display error message
     end
 ```
+
 ---
 
 ## 2. Scope for Unit Test (xUnit), SpecFlow (BDD), and UI Testing
