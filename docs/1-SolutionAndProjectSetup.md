@@ -16,4 +16,10 @@
 - BookLibrary.Database (SQL Server Database Project)
   - For SQL scripts, optional tSQLt tests.
 
+#### Go to your VS2022 installer for Individual Components and select:
+
+Net Framework project and item templates
+
+> Enables .NET Framework project templates, item templates & related features for .NET Framework development.
+
 ![image](https://github.com/user-attachments/assets/e65816e7-d88b-4834-951e-7f3b1ff4d28d)
