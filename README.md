@@ -14,11 +14,15 @@ A simple ASP.NET MVC (.NET Framework 4.8) application for managing a library of 
 
 ```
 BookLibrary/
-├── BookLibrary.Database/    # SQL Server Database Project (with tSQLt for DB unit tests)
-├── BookLibrary.Data/        # Data access (EF models, DbContext, Repository)
-├── BookLibrary.Business/    # Business logic (Services, business rules)
-├── BookLibrary.Web/         # ASP.NET MVC web UI (Controllers, Views)
-└── BookLibrary.Tests/       # Test project (xUnit, SpecFlow, Selenium)
+├── BookLibrary.Database/            # SQL Server Database Project (with tSQLt for DB unit tests)
+├── BookLibrary.Data/                # Data access (EF models, DbContext, Repository)
+├── BookLibrary.Business/            # Business logic (Services, business rules)
+├── BookLibrary.Web/                 # ASP.NET MVC web UI (Controllers, Views)
+└── BookLibrary.UnitTests/           # Test project (xUnit, SpecFlow, Selenium)
+└── BookLibrary.IntegrationTests/    # Test project (xUnit, SpecFlow)
+└── BookLibrary.UITests/             # Test project (xUnit, Selenium)
+└── BookLibrary.DatabaseTests/       # Test project (tSQLt)
+
 ```
 > The **BookLibrary.Database** project is **for source-controlling your SQL scripts** (tables, procs, initial data, tSQLt tests, migrations), not for database-first modeling. Your application can still use **EF Code-First** or **EF Migrations**.
 
@@ -122,7 +126,7 @@ This project is designed so you can demonstrate and teach all major test levels 
 ### **B. Unit Testing Scope (xUnit)**
 
 **Where?**  
-- `BookLibrary.Tests.xUnit` project.
+- `BookLibrary.UnitTests` project.
 
 **What to Test?**
 - **Business Layer:** Test business rules in `BookService` (e.g., prevent "Test" in book title).
@@ -139,7 +143,7 @@ This project is designed so you can demonstrate and teach all major test levels 
 ### **C. SpecFlow (BDD) Testing Scope**
 
 **Where?**  
-- `BookLibrary.Tests.SpecFlow` project (with SpecFlow NuGet).
+- `BookLibrary.IntegrationTests` project (with SpecFlow NuGet).
 
 **What to Test?**
 - **Business Scenarios:** End-user stories, e.g., "As a librarian, I want to add a book so that it appears in the catalog."
@@ -156,7 +160,7 @@ This project is designed so you can demonstrate and teach all major test levels 
 ### **D. UI (Selenium) Testing Scope**
 
 **Where?**  
-- `BookLibrary.Tests.UI` (UI test folder) or a dedicated project like `BookLibrary.UI.Tests`.
+- `BookLibrary.UITests` (UI test folder).
 
 **What to Test?**
 - **UI Flows:** Add, edit, delete book via the browser.
