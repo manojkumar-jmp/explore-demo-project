@@ -1,6 +1,6 @@
 # BookLibrary Demo Project: Architecture Overview & Testing Scope
 
-> This demo project will use in upcomming tutorial series for Unit Testing, TDT and UI testing. 
+> This demo project will use in upcomming tutorial series for Unit Testing (xUnit), BDD (SpecFlow + xUnit), UI testing (Selenium WebDriver, xUnit) and Database Testing (tSQLt). 
 
 ---
 > [Solution in Detail](docs/0-Overview.md)
