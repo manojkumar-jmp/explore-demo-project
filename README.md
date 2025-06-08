@@ -4,7 +4,7 @@
 
 ## 1. Architecture Overview
 
-A simple ASP.NET MVC (.NET Framework 4.8) application for managing a library of books. This project demonstrates clean layered architecture, separation of concerns, dependency injection, and testability, suitable for BDD (SpecFlow), UI automation (Selenium), and **xUnit-based unit testing** tutorials.
+A simple ASP.NET MVC (.NET Framework 4.8) application for managing a library of books. This project demonstrates clean layered architecture, separation of concerns, dependency injection, and testability, suitable for BDD (SpecFlow), UI automation (Selenium), and xUnit-based unit testing tutorials.
 
 ### **Solution Structure**
 
@@ -15,10 +15,6 @@ BookLibrary/
 ├── BookLibrary.Web/         # ASP.NET MVC web UI (Controllers, Views)
 └── BookLibrary.Tests/       # Test project (xUnit, SpecFlow, Selenium)
 ```
-
-> Replace `BookLibrary.SpecFlow` with `BookLibrary.Tests` for a unified test project using xUnit, SpecFlow, and Selenium.
-
----
 
 ### **Layered Architecture**
 
@@ -49,58 +45,6 @@ BookLibrary/
 - **xUnit:** For unit testing business, repository, and controller layers.
 - **SpecFlow:** BDD scenarios for features like "Add Book", "List Books".
 - **Selenium:** UI automation for browser-based tests, e.g., verifying business rules in the UI.
-
----
-
-### **Example File Structure and Flow**
-
-#### Entity Example
-```csharp
-// BookLibrary.Data/Book.cs
-public class Book { public int Id; public string Title; public string Author; }
-```
-
-#### DbContext Example
-```csharp
-// BookLibrary.Data/LibraryContext.cs
-public class LibraryContext : DbContext { public DbSet<Book> Books { get; set; } }
-```
-
-#### Repository Example
-```csharp
-// BookLibrary.Data/IBookRepository.cs
-public interface IBookRepository { IEnumerable<Book> GetAll(); ... }
-```
-
-#### Business Service Example with Rule
-```csharp
-// BookLibrary.Business/BookService.cs
-public void AddBook(Book book) {
-    if (book.Title.Contains("Test")) throw new InvalidOperationException("Book title cannot contain 'Test'.");
-    _repository.Add(book); _repository.Save();
-}
-```
-
-#### Controller Example (DI)
-```csharp
-// BookLibrary.Web/Controllers/BooksController.cs
-public class BooksController : Controller {
-    private readonly IBookService _service;
-    public BooksController(IBookService service) { _service = service; }
-    public ActionResult Create(Book book) {
-        try { _service.AddBook(book); ... }
-        catch (InvalidOperationException ex) { ModelState.AddModelError("", ex.Message); }
-    }
-}
-```
-
-#### Unity DI Example
-```csharp
-// BookLibrary.Web/App_Start/UnityConfig.cs
-container.RegisterType<IBookRepository, BookRepository>();
-container.RegisterType<IBookService, BookService>();
-DependencyResolver.SetResolver(new UnityDependencyResolver(container));
-```
 
 ---
 
@@ -148,29 +92,6 @@ This project is designed so you can demonstrate and teach all major test levels 
 - Fast feedback.
 - Pinpoint bugs in isolated units (no DB or UI required).
 - Teaches how to use Moq or similar libraries for dependency mocking.
-
-**Example (xUnit):**
-```csharp
-// BookLibrary.Tests/Business/BookServiceTests.cs
-using Xunit;
-using Moq;
-using BookLibrary.Data;
-using BookLibrary.Business;
-using System;
-
-public class BookServiceTests
-{
-    [Fact]
-    public void AddBook_ThrowsException_WhenTitleContainsTest()
-    {
-        var mockRepo = new Mock<IBookRepository>();
-        var service = new BookService(mockRepo.Object);
-        var book = new Book { Title = "Test Driven", Author = "Kent Beck" };
-        Assert.Throws<InvalidOperationException>(() => service.AddBook(book));
-    }
-}
-```
-
 ---
 
 ### **B. SpecFlow (BDD) Testing Scope**
@@ -187,17 +108,6 @@ public class BookServiceTests
 - Closes the gap between requirements and implementation.
 - Living documentation for business logic.
 - Can drive development (TDD/BDD).
-
-**Example Feature:**
-```gherkin
-Feature: Book management
-
-  Scenario: Prevent adding books with forbidden words
-    Given I am on the "Add Book" page
-    When I enter the title "Test Driven" and author "Kent Beck"
-    And I submit the form
-    Then I should see an error saying "Book title cannot contain the word 'Test'."
-```
 
 ---
 
@@ -216,56 +126,14 @@ Feature: Book management
 - Catches regression and integration bugs.
 - Mimics real user behavior.
 
-**Example (xUnit + Selenium):**
-```csharp
-// BookLibrary.Tests/UI/AddBookUITests.cs
-using Xunit;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-
-public class AddBookUITests
-{
-    [Fact]
-    public void AddBook_UI_ShowsError_WhenTitleContainsTest()
-    {
-        using (var driver = new ChromeDriver())
-        {
-            driver.Navigate().GoToUrl("http://localhost:1234/Books/Create");
-            driver.FindElement(By.Id("Title")).SendKeys("Test Driven");
-            driver.FindElement(By.Id("Author")).SendKeys("Kent Beck");
-            driver.FindElement(By.Id("Submit")).Click();
-            Assert.Contains("Book title cannot contain the word 'Test'.", driver.PageSource);
-        }
-    }
-}
-```
-
 ---
 
 ### **D. How the Layers Interact in Testing**
 
-| Test Level   | Layer Under Test    | Dependencies         | Tools/Libraries              |
-|--------------|--------------------|----------------------|------------------------------|
-| Unit Test    | Business, Controller | Mocked Repositories | **xUnit**, Moq               |
-| BDD (SpecFlow) | Full Stack         | Real DB/Test DB      | SpecFlow, xUnit              |
-| UI Test      | Full Stack + UI     | Real DB, Browser     | Selenium WebDriver, xUnit    |
+| Test Level     | Layer Under Test     | Dependencies         | Tools/Libraries              |
+|----------------|----------------------|----------------------|------------------------------|
+| Unit Test      | Business, Controller | Mocked Repositories  | xUnit, Moq                   |
+| BDD (SpecFlow) | Full Stack           | Real DB/Test DB      | SpecFlow, xUnit              |
+| UI Test        | Full Stack + UI      | Real DB, Browser     | Selenium WebDriver, xUnit    |
 
 ---
-
-### **E. Teaching Flow Suggestion**
-
-1. **Unit Test (xUnit):**  
-   Start with business/service layer. Show test isolation using mocks.
-
-2. **SpecFlow (BDD):**  
-   Write scenarios in Gherkin, implement step definitions, and show how they connect to real business logic.
-
-3. **UI Test (Selenium + xUnit):**  
-   Automate the browser, show how the UI enforces business rules.
-
-4. **Integration:**  
-   Show how all tests together provide confidence in the application.
-
----
-
-**With this architecture and testing scope, you can fully demonstrate modern testing practices in .NET using a single, realistic demo project, leveraging xUnit for robust unit and integration testing.**
