@@ -24,6 +24,4 @@ Net Framework project and item templates
 
 ![image](https://github.com/user-attachments/assets/e65816e7-d88b-4834-951e-7f3b1ff4d28d)
 
-![image](https://github.com/user-attachments/assets/bf6d8c07-e0ac-454f-87c4-232775f4625c)
-
-
+![image](https://github.com/user-attachments/assets/c4f8f772-9176-465a-8c97-adbbe7d43330)
