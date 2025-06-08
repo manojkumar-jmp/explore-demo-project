@@ -18,7 +18,7 @@ BookLibrary/
 ├── BookLibrary.Data/                # Data access (EF models, DbContext, Repository)
 ├── BookLibrary.Business/            # Business logic (Services, business rules)
 ├── BookLibrary.Web/                 # ASP.NET MVC web UI (Controllers, Views)
-└── BookLibrary.UnitTests/           # Test project (xUnit, SpecFlow, Selenium)
+└── BookLibrary.UnitTests/           # Test project (xUnit)
 └── BookLibrary.IntegrationTests/    # Test project (xUnit, SpecFlow)
 └── BookLibrary.UITests/             # Test project (xUnit, Selenium)
 └── BookLibrary.DatabaseTests/       # Test project (tSQLt)
