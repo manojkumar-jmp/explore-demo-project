@@ -15,3 +15,5 @@
   - For unit, BDD, and UI tests.
 - BookLibrary.Database (SQL Server Database Project)
   - For SQL scripts, optional tSQLt tests.
+
+![image](https://github.com/user-attachments/assets/e65816e7-d88b-4834-951e-7f3b1ff4d28d)
