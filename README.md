@@ -5,36 +5,43 @@
 
 ## 1. Architecture Overview
 
-A simple ASP.NET MVC (.NET Framework 4.8) application for managing a library of books. This project demonstrates clean layered architecture, separation of concerns, dependency injection, and testability, suitable for BDD (SpecFlow), UI automation (Selenium), and xUnit-based unit testing tutorials.
+A simple ASP.NET MVC (.NET Framework 4.8) application for managing a library of books. This project demonstrates clean layered architecture, separation of concerns, dependency injection, and testability, suitable for BDD (SpecFlow), UI automation (Selenium), xUnit-based unit testing, and database unit testing with tSQLt.
 
 ### **Solution Structure**
 
 ```
 BookLibrary/
+├── BookLibrary.Database/    # SQL Server Database Project (with tSQLt for DB unit tests)
 ├── BookLibrary.Data/        # Data access (EF models, DbContext, Repository)
 ├── BookLibrary.Business/    # Business logic (Services, business rules)
 ├── BookLibrary.Web/         # ASP.NET MVC web UI (Controllers, Views)
 └── BookLibrary.Tests/       # Test project (xUnit, SpecFlow, Selenium)
 ```
+> The **BookLibrary.Database** project is **for source-controlling your SQL scripts** (tables, procs, initial data, tSQLt tests, migrations), not for database-first modeling. Your application can still use **EF Code-First** or **EF Migrations**.
 
-### **Layered Architecture**
+---
 
-#### **A. Data Layer (`BookLibrary.Data`)**
+#### **A. Database Layer (`BookLibrary.Database`)**
+- **Database Project:** Contains `.sql` files for tables, views, stored procedures, and scripts.
+- **Unit Testing with tSQLt:** Contains test classes and test procedures, enabling unit tests at the T-SQL level (e.g., for a `Book` table or a `usp_AddBook` stored procedure).
+- **Automated Builds:** Allows you to deploy, version, and test the database independently.
+
+#### **B. Data Layer (`BookLibrary.Data`)**
 - **Entities:** Defines `Book` with properties (`Id`, `Title`, `Author`).
 - **DbContext:** `LibraryContext` manages EF DB connection and `DbSet<Book>`.
 - **Repository Pattern:** `IBookRepository` abstracts data access; `BookRepository` implements CRUD using `LibraryContext`.
 
-#### **B. Business Layer (`BookLibrary.Business`)**
+#### **C. Business Layer (`BookLibrary.Business`)**
 - **Services:** `IBookService` interface and `BookService` implementation.
 - **Business Rules:** Encapsulates domain logic, e.g., **book titles cannot contain the word "Test"** (throws exception if violated).
 - **Dependency:** Uses `IBookRepository` for data operations.
 
-#### **C. Presentation Layer (`BookLibrary.Web`)**
+#### **D. Presentation Layer (`BookLibrary.Web`)**
 - **Controllers:** e.g., `BooksController` depends on `IBookService` (not direct data access).
 - **Views:** Razor views for listing, creating, editing, deleting books.
 - **Error Handling:** Business rule violations are shown as model errors in the UI.
 
-#### **D. Dependency Injection**
+#### **E. Dependency Injection**
 - **Unity Container:** Configured in `UnityConfig.cs` (Web project).
     - Maps interfaces to implementations:
         - `IBookRepository` → `BookRepository`
@@ -42,10 +49,11 @@ BookLibrary/
         - Registers `LibraryContext`
 - **Controller Construction:** Services injected via constructors, allowing for easy mocking and testing.
 
-#### **E. Testing Layer (`BookLibrary.Tests`)**
+#### **F. Testing Layer (`BookLibrary.Tests`)**
 - **xUnit:** For unit testing business, repository, and controller layers.
 - **SpecFlow:** BDD scenarios for features like "Add Book", "List Books".
 - **Selenium:** UI automation for browser-based tests, e.g., verifying business rules in the UI.
+- **Database (tSQLt):** Database unit tests live in the database project and can be run independently or as part of a CI/CD pipeline.
 
 ---
 
@@ -57,6 +65,7 @@ BookLibrary/
 - **Reusability:** Business logic is decoupled from UI, so it can be reused in other apps (e.g., APIs).
 - **Extensibility:** New features or rules can be added to the business layer without affecting other parts of the system.
 - **BDD & Automation Ready:** Structure is ideal for SpecFlow (business scenarios) and Selenium (UI tests).
+- **Database Script Management:** Ensures all DB schema and logic changes are tracked and testable.
 
 ---
 
@@ -97,8 +106,14 @@ sequenceDiagram
 This project is designed so you can demonstrate and teach all major test levels in a modern .NET Framework solution using **xUnit**.
 
 ---
+### **A. Database Project (BookLibrary.Database)**
 
-### **A. Unit Testing Scope (xUnit)**
+- **Purpose:**  
+  - Source-control all DDL/DML scripts (tables, procs, data, migrations)
+  - Optionally, include tSQLt unit tests for DB logic (e.g., stored procs, constraints)
+  - **Not** for database-first modeling—your EF models still drive schema
+  
+### **B. Unit Testing Scope (xUnit)**
 
 **Where?**  
 - `BookLibrary.Tests` project.
@@ -115,7 +130,7 @@ This project is designed so you can demonstrate and teach all major test levels 
 - Teaches how to use Moq or similar libraries for dependency mocking.
 ---
 
-### **B. SpecFlow (BDD) Testing Scope**
+### **C. SpecFlow (BDD) Testing Scope**
 
 **Where?**  
 - `BookLibrary.Tests` project (with SpecFlow NuGet).
@@ -132,7 +147,7 @@ This project is designed so you can demonstrate and teach all major test levels 
 
 ---
 
-### **C. UI (Selenium) Testing Scope**
+### **D. UI (Selenium) Testing Scope**
 
 **Where?**  
 - `BookLibrary.Tests` (UI test folder) or a dedicated project like `BookLibrary.UI.Tests`.
@@ -149,12 +164,31 @@ This project is designed so you can demonstrate and teach all major test levels 
 
 ---
 
-### **D. How the Layers Interact in Testing**
+### **E. How the Layers Interact in Testing**
 
-| Test Level     | Layer Under Test     | Dependencies         | Tools/Libraries              |
-|----------------|----------------------|----------------------|------------------------------|
-| Unit Test      | Business, Controller | Mocked Repositories  | xUnit, Moq                   |
-| BDD (SpecFlow) | Full Stack           | Real DB/Test DB      | SpecFlow, xUnit              |
-| UI Test        | Full Stack + UI      | Real DB, Browser     | Selenium WebDriver, xUnit    |
+| Test Level     | Layer Under Test      | Dependencies         | Tools/Libraries              |
+|----------------|-----------------------|----------------------|------------------------------|
+| DB Unit Test   | SQL Schema/Procedures | tSQLt, SQL Server    | tSQLt, SSMS/CI/CD            |
+| Unit Test      | Business, Controller  | Mocked Repositories  | xUnit, Moq                   |
+| BDD (SpecFlow) | Full Stack            | Real DB/Test DB      | SpecFlow, xUnit              |
+| UI Test        | Full Stack + UI       | Real DB, Browser     | Selenium WebDriver, xUnit    |
 
 ---
+
+
+### **F. Teaching Flow Suggestion**
+
+1. **Database Unit Test (tSQLt):**  
+   Show how to write and run database unit tests for entities and stored procedures.
+
+2. **Unit Test (xUnit):**  
+   Start with business/service layer. Show test isolation using mocks.
+
+3. **SpecFlow (BDD):**  
+   Write scenarios in Gherkin, implement step definitions, and show how they connect to real business logic.
+
+4. **UI Test (Selenium + xUnit):**  
+   Automate the browser, show how the UI enforces business rules.
+
+5. **Integration:**  
+   Show how all tests together provide confidence in the application.
