@@ -1,3 +1,5 @@
+📘 See [DISCLAIMER](https://github.com/manojkumar-jmp/.github/blob/main/DISCLAIMER.md) for legal and usage disclaimers related to this repository.
+
 # BookLibrary Demo Project: Architecture Overview & Testing Scope
 
 > This demo project will use in upcomming tutorial series for Unit Testing (xUnit), BDD (SpecFlow, xUnit), UI testing (Selenium WebDriver, xUnit) and Database Testing (tSQLt). 
